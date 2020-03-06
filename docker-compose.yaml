@@ -1,0 +1,12 @@
+version: "3"
+services:
+  localtunnel:
+    image: defunctzombie/localtunnel-server
+    network_mode: host
+    ports:
+      - 80
+    command:
+    - -port
+    - "80"
+    - --domain
+    - localtunnel.test.dsyer.com
