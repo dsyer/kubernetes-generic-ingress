@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   localtunnel:
-    image: server
+    build: server
     network_mode: host
     ports:
     - 3000
