@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   localtunnel:
-    image: defunctzombie/localtunnel-server
+    image: server
     network_mode: host
     ports:
     - 3000
@@ -11,7 +11,7 @@ services:
     - --domain
     - test.dsyer.com
   nginx:
-    image: proxy
+    build: .
     network_mode: host
     depends_on:
     - localtunnel
