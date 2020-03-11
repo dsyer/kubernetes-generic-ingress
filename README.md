@@ -111,14 +111,6 @@ As soon as the ingress is active in the cluster the app is visible on the intern
 
 The server that listens on the base domain isn't very complicated, and could definitely be improved. It exposes TCP connections on random ports (one per client, or equivalently per subdomain), so it isn't easy to run in Kubernetes, but you can run it with `docker` using the host network.
 
-Grab the server code from github:
-
-```
-$ mkdir -p server
-$ curl -L https://github.com/dsyer/localtunnel-server/archive/master.tar.gz | \
-    tar xz -C server --strip-components 1
-```
-
 ### External DNS Set Up
 
 The `site.conf` and `docker-compose.yaml` both carry references to the `test.dsyer.com` subdomain. To run the server yourself you will need  your own subdomain, registered in an external DNS provider and with a wildcard A record for all sub-subdomains. Make the A record and check that it is working, e.g:
@@ -144,6 +136,16 @@ server.crt  server.key
 
 ### Run the Server
 
+Grab the server code from github:
+
+```
+$ mkdir -p server
+$ curl -L https://github.com/dsyer/localtunnel-server/archive/master.tar.gz | \
+    tar xz -C server --strip-components 1
+```
+
+Then run it (in this example we are running from a directory called "localtunnel"):
+
 ```
 $ docker-compose up
 ...
@@ -152,7 +154,7 @@ Creating localtunnel_nginx_1       ... done
 Attaching to localtunnel_localtunnel_1, localtunnel_nginx_1
 ```
 
-If any clients connect you will see it in the logs
+If any clients connect you will see it in the logs of the tunnel server (the `clientId` is the subdomain in the remote `nginx-tunnel` deployment):
 
 ```
 localtunnel_1  | 2020-03-11T09:07:10.844Z localtunnel:server Retrieving clientId: test.dsyer.com
@@ -161,7 +163,7 @@ localtunnel_1  | 2020-03-11T09:07:10.849Z localtunnel:server making new client w
 localtunnel_1  | 2020-03-11T09:07:10.852Z lt:TunnelAgent[food] tcp server listening on port: 33145
 ```
 
-and when HTTP requests come in they are forwarded through the tunnel to the remote Kubernetes ingress. For example:
+When HTTP requests come in they are forwarded through the tunnel to the remote Kubernetes ingress. You will see that in the nginx logs. For example:
 
 ```
 nginx_1        | 86.30.187.113 - - [11/Mar/2020:09:42:53 +0000] "GET /actuator HTTP/1.1" demo.food.test.dsyer.com /actuator 200 469 "-" "curl/7.58.0" "-"
