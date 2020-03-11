@@ -103,7 +103,7 @@ $ curl demo.food.test.dsyer.com/actuator
 {"_links":{"self":...}}
 ```
 
-Amazing!
+As soon as the ingress is active in the cluster the app is visible on the internet. No frustrating 10 minutes delay while the DNS propagation works itself out (sometimes it takes over an hour for me with a new app on GKE without the tunnel). Amazing!
 
 ## Build and Run The Server
 
