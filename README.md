@@ -1,8 +1,10 @@
 # Generic Ingress
 
-The idea is to get a similar experience with Kubernetes ingress as you get with [PWS](https://run.pivotal.io/) - you don't have to futz with DNS or certificates and every app you deploy is addressable immediately on the internet. In PWS the apps get a route in `*.cfapps.io`. Pivotal owns the `cfapps.io` domain and they have created wildcard DNS records and SSL certificates. Pivotal only had to do that once.
+[Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) is a standard feature of Kubernetes. But it's a total mess. The standardized bits work fine, but connecting your ingress server to the internet (i.e. making it addressable using a hostname not an IP address) is painful in the extreme. Even exposing a raw IP address can be a slow and frustrating experience, and it won't even work for many applications (like ones that look at the `Host` header in incoming HTTP requests).
 
-To get a similar experience with Kubernetes running *anywhere* doesn't sound like such a crazy idea. This project is what I did to prove that it works. In PWS every app gets its own subdomain. The idea here is that every Kubernetes cluster gets its own subdomain (e.g. `mycluster.cfapps.io`), and apps are registered as sub-subdomains below that (e.g. `demo.mycluster.cfapps.io`). The cluster can be running anywhere (including locally).
+In [PWS](https://run.pivotal.io/) every app gets a route in `*.cfapps.io` by default, and you can set up a custom domain at any time. A new app shows up on `cfapps.io` immediately, as soon as the process is running. [Heroku](https://heroku.com) works the same way. The idea here is to get a similar experience with Kubernetes ingress - you don't have to futz with DNS or certificates and every app you deploy is addressable immediately on the internet. 
+
+This project is what I did to prove that it works. In PWS every app gets its own subdomain. The idea here is that every Kubernetes cluster gets its own subdomain (e.g. `mycluster.cfapps.io`), and apps are registered as sub-subdomains below that (e.g. `demo.mycluster.cfapps.io`). The cluster can be running anywhere (including locally). Pivotal owns the `cfapps.io` domain and they have created wildcard DNS records and SSL certificates. Pivotal only had to do that once, so we should be able to do the same for apps on Kubernetes.
 
 ## User Experience
 
