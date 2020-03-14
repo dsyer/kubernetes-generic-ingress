@@ -18,7 +18,7 @@ Add the standard off-the-shelf [nginx ingress](https://github.com/kubernetes/ing
 
 ```
 $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/mandatory.yaml
-$ kubectl apply -f <(curl https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/provider/baremetal/service-nodeport.yaml | sed -i -e '/  type:.*/d')
+$ kubectl apply -f <(curl https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/provider/baremetal/service-nodeport.yaml | sed -e '/  type:.*/d')
 ```
 
 The nginx ingress lives in its own namespace. You only have to do this step once per cluster. To check that it is working look for the `ingress-nginx` service and make sure it is of type `ClusterIP`:
@@ -44,11 +44,17 @@ metadata:
   name: nginx-tunnel
   namespace: ingress-nginx
   labels:
-    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/name: nginx-tunnel
     app.kubernetes.io/part-of: ingress-nginx
 spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nginx-tunnel
   replicas: 1
   template:
+    metadata:
+        labels:
+          app.kubernetes.io/name: nginx-tunnel
     spec:
       containers:
       - name: app
